@@ -1,27 +1,3 @@
-"""
-04_excel_export.py  |  Təmizləmədən əvvəlki və sonrakı vəziyyəti Excel faylına yazır.
-
-Nə vaxt işlədilir: 01_load.sql və 02_clean.sql işləndikdən SONRA.
-
-Colab-da:
-    %run /content/olist_project/excel/04_excel_export.py
-Öz kompüterinizdə (PostgreSQL localhost-dadırsa):
-    python 04_excel_export.py
-
-Əlaqə parametrləri mühit dəyişənlərindən oxunur (PGHOST, PGPORT, PGUSER,
-PGPASSWORD, PGDATABASE). Verilməyibsə Colab üçün olan standart dəyərlər
-işlədilir.
-
-Nəticə: olist_before_after.xlsx  (aşağıdakı vərəqlər)
-    1_Əvvəl_Sonra       raw və clean sətir sayı
-    2_Boş_xanalar_raw   xam datada hər sütunda neçə boş xana
-    3_Boş_xanalar_clean təmizlənmiş datada eyni göstərici
-    4_Təkrarlar         açar və tam sətir təkrarları (raw)
-    5_Jurnal            clean.cleaning_log (hər qərar)
-    6_Sütun_lüğəti      sütunların mənası, tipi, problemi
-    7_Aylıq_dinamika    aylıq sifariş sayı və gəlir
-    8_Pivot_data        Pivot üçün hazır data (Insert -> PivotTable)
-"""
 import io
 import os
 import subprocess
@@ -42,7 +18,6 @@ OUT_FILE = Path(os.environ.get("OUT_FILE", "olist_before_after.xlsx"))
 DICT_CSV = Path(os.environ.get("DICT_CSV", HERE.parent / "docs" / "column_dictionary.csv"))
 
 def run_sql(sql: str) -> pd.DataFrame:
-    """SQL-i psql ilə işlədir, nəticəni DataFrame kimi qaytarır (əlavə paket lazım deyil)."""
     wrapped = f"COPY ({sql.strip().rstrip(';')}) TO STDOUT WITH CSV HEADER"
     r = subprocess.run(
         ["psql", "-X", "-q", "-v", "ON_ERROR_STOP=1", "-c", wrapped],
