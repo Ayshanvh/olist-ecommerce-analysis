@@ -1,6 +1,6 @@
-// ER diaqram (clean sxemi). https://dbdiagram.io/d saytına yapışdırın:
-// "Import" yox, sol tərəfdəki kod sahəsinə birbaşa yazın/yapışdırın,
-// sağda diaqram avtomatik çəkilir. Export -> PNG/PDF ilə şəkil götürün.
+// Olist ER diaqram (clean sxemi)
+// dbdiagram.io saytında sol tərəfdəki kod sahəsinə yapışdırın, sağda diaqram çəkilir.
+// Export -> PNG/PDF ilə şəkil götürün.
 
 Table customers {
   customer_id varchar [pk, note: 'hər sifarişdə yeni yaranır']
@@ -88,6 +88,6 @@ Table geolocation {
   raw_row_count bigint
 }
 
-// Zip prefiks üzrə ƏLAQƏ (FK yoxdur, çünki bütün zip-lər geolocation-da olmaya bilər)
+// Zip prefiks üzrə məntiqi əlaqə. Bazada FK yoxdur, çünki bütün zip-lər geolocation-da olmaya bilər
 Ref: customers.zip_prefix > geolocation.zip_prefix
 Ref: sellers.zip_prefix > geolocation.zip_prefix
