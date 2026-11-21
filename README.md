@@ -28,7 +28,7 @@ python /content/olist_project/excel/04_excel_export.py
 
 `01_load.sql` CSV-ləri relativ yolla oxuyur, ona görə `psql` CSV qovluğunda işlədilməlidir.
 
-## Əsas qərarlar (müdafiədə izah edin)
+## Əsas qərarlar
 
 1. **Xam data toxunulmazdır.** `raw` sxemi dəyişmir, təmizlənmiş versiya `clean` sxemindədir.
 2. **Təkrarlar silinir** (`DISTINCT ON` açar üzrə). Rəylərdə sifariş başına son rəy qalır, çünki bəzi sifarişlərin bir neçə rəyi var və JOIN sətirləri artırar.
@@ -38,8 +38,3 @@ python /content/olist_project/excel/04_excel_export.py
 6. **"Tərk edən" müştəri** = yalnız 1 sifariş verib və təkrar almayıb. Dataset hazır `churn` sütunu vermir.
 7. **Gəlir** = `price` cəmi. Daşıma haqqı daxil deyil. `canceled` və `unavailable` sifarişlər sayılmır.
 
-## Əl ilə tamamlanmalı olanlar
-
-- **Excel Pivot:** `olist_before_after.xlsx` içindəki `8_Pivot_data` vərəqində *Insert → PivotTable* edin. Sətirlərə `month`, qiymətlərə `price` (Sum), filtrə `order_status` qoyun, qrafik əlavə edin. Skript hazır PivotTable yarada bilmir, yalnız data və aylıq cədvəl hazırlayır.
-- **ER diaqram şəkli:** `olist.dbml` məzmununu dbdiagram.io-ya yapışdırıb PNG export edin.
-- **Rəqəmlər:** sorğuların nəticələrini öz datanızda işlədib yoxlayın, kodda real rəqəm yoxdur.
