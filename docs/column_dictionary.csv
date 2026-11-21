@@ -1,0 +1,53 @@
+table_name,column_name,meaning,type_after_cleaning,problem_or_note
+customers,customer_id,Sifarişə bağlı müştəri açarı,text (PK),Hər sifarişdə yenidən yaranır. Müştəri saymaq üçün yaramır
+customers,customer_unique_id,Real müştərinin unikal kodu,text,Eyni müştərinin bir neçə customer_id-si ola bilər. Müştəri sayı bundan hesablanır
+customers,customer_zip_code_prefix,Poçt indeksinin ilk 5 rəqəmi,text (5 simvol),Rəqəm kimi oxunanda baş sıfırlar itir. LPAD ilə 5 simvola çatdırılır
+customers,customer_city,Müştərinin şəhəri,text (kiçik hərf),Hərf registri və boşluq fərqləri ola bilər
+customers,customer_state,Müştərinin ştatı (2 hərf),text (böyük hərf),Standartlaşdırılır (UPPER/TRIM)
+orders,order_id,Sifarişin unikal kodu,text (PK),Təkrar sətir yoxlanır
+orders,customer_id,Sifarişi verən müştəri açarı,text (FK),customers ilə bağlıdır
+orders,order_status,Sifarişin statusu (delivered / shipped / canceled / unavailable / invoiced və s.),text,Statusa görə tarix sütunları boş qala bilər
+orders,order_purchase_timestamp,Sifarişin verilmə vaxtı,timestamp,Xam datada mətn kimi gəlir
+orders,order_approved_at,Ödənişin təsdiq vaxtı,timestamp,Bəzi sifarişlərdə boşdur. Sifariş tarixindən əvvəl olmamalıdır
+orders,order_delivered_carrier_date,Kuryerə verilmə vaxtı,timestamp,Boş ola bilər. Sifariş tarixindən əvvəl olmamalıdır
+orders,order_delivered_customer_date,Müştəriyə çatdırılma vaxtı,timestamp,Çatmayan və ləğv olunmuş sifarişlərdə boşdur. Məntiqsiz (sifarişdən əvvəlki) tarixlər yoxlanır
+orders,order_estimated_delivery_date,Müştəriyə vəd olunan çatdırılma tarixi,timestamp,Saat həmişə 00:00-dır. Gecikməni hesablamaq üçün istifadə olunur
+order_items,order_id,Sifariş kodu,text (PK hissəsi / FK),orders ilə bağlıdır
+order_items,order_item_id,Sifarişdəki məhsul sətrinin sıra nömrəsi,int (PK hissəsi),Eyni məhsuldan çox alınanda ayrı sətirlər olur
+order_items,product_id,Məhsul kodu,text (FK),products ilə bağlıdır
+order_items,seller_id,Satıcı kodu,text (FK),sellers ilə bağlıdır
+order_items,shipping_limit_date,Satıcının kuryerə verməli olduğu son tarix,timestamp,Xam datada mətn kimi gəlir
+order_items,price,Məhsulun qiyməti (BRL),"numeric(12,2)",Sıfır və ya mənfi olmamalıdır. Gəlir bu sütundan hesablanır
+order_items,freight_value,Daşıma haqqı (BRL),"numeric(12,2)",Mənfi olmamalıdır
+order_payments,order_id,Sifariş kodu,text (PK hissəsi / FK),Bir sifarişin bir neçə ödəniş sətri ola bilər
+order_payments,payment_sequential,Ödənişin sıra nömrəsi,int (PK hissəsi),
+order_payments,payment_type,Ödəniş üsulu (credit_card / boleto / voucher / debit_card),text,"not_defined kimi qeyri-müəyyən dəyər ola bilər, 'unknown' kimi işarələnir"
+order_payments,payment_installments,Taksit sayı,int,
+order_payments,payment_value,Ödənilən məbləğ (BRL),"numeric(12,2)",Sıfır məbləğli ödənişlər yoxlanır (məsələn voucher)
+order_reviews,review_id,Rəyin kodu,text,Eyni review_id təkrarlana bilir
+order_reviews,order_id,Rəyin aid olduğu sifariş,text (PK / FK),Bəzi sifarişlərin bir neçə rəyi var. Sifariş başına son rəy saxlanılır
+order_reviews,review_score,Rəy balı (1-5),int,1-5 aralığından kənar dəyər NULL olur
+order_reviews,review_comment_title,Rəyin başlığı,text,Əksər sətirlərdə boşdur
+order_reviews,review_comment_message,Rəyin mətni,text,Çox hissəsi boşdur. Mətn bir neçə sətirli ola bilər
+order_reviews,review_creation_date,Rəy anketinin göndərilmə vaxtı,timestamp,
+order_reviews,review_answer_timestamp,Rəyə cavab verilmə vaxtı,timestamp,Təkrar rəylərdən ən yenisini seçmək üçün istifadə olunur
+products,product_id,Məhsul kodu,text (PK),
+products,product_category_name,Kateqoriya adı (portuqalca),text,Bəzi məhsullarda boşdur ('unknown' kimi işarələnir). Bəzi kateqoriyaların ingiliscə tərcüməsi yoxdur
+products,product_name_lenght,Məhsul adının simvol sayı,int,Sütun adında yazılış səhvi var (lenght). Təmizlənmişdə name_length
+products,product_description_lenght,Məhsul təsvirinin simvol sayı,int,Sütun adında yazılış səhvi var (lenght). Təmizlənmişdə description_length
+products,product_photos_qty,Məhsul şəkillərinin sayı,int,Boş ola bilər
+products,product_weight_g,Çəki (qram),numeric,Boş və ya 0 ola bilər
+products,product_length_cm,Uzunluq (sm),numeric,Boş ola bilər
+products,product_height_cm,Hündürlük (sm),numeric,Boş ola bilər
+products,product_width_cm,En (sm),numeric,Boş ola bilər
+sellers,seller_id,Satıcı kodu,text (PK),
+sellers,seller_zip_code_prefix,Satıcının poçt indeksinin ilk 5 rəqəmi,text (5 simvol),Baş sıfırlar itə bilər
+sellers,seller_city,Satıcının şəhəri,text (kiçik hərf),Yazılış qarışıqlığı ola bilər
+sellers,seller_state,Satıcının ştatı,text (böyük hərf),
+geolocation,geolocation_zip_code_prefix,Poçt indeksinin ilk 5 rəqəmi,text (PK),Eyni zip prefiksə çoxlu sətir düşür
+geolocation,geolocation_lat,Enlik,double,Eyni zip üçün koordinatlar fərqli ola bilər. Orta götürülür
+geolocation,geolocation_lng,Uzunluq,double,Eyni zip üçün koordinatlar fərqli ola bilər. Orta götürülür
+geolocation,geolocation_city,Şəhər,text,Eyni zip üçün fərqli yazılışlar ola bilər. Ən çox yazılan seçilir
+geolocation,geolocation_state,Ştat,text,
+product_category_name_translation,product_category_name,Kateqoriya adı (portuqalca),text (PK),
+product_category_name_translation,product_category_name_english,Kateqoriya adı (ingiliscə),text,Bütün kateqoriyaları əhatə etməyə bilər

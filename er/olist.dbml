@@ -1,0 +1,93 @@
+// ER diaqram (clean sxemi). https://dbdiagram.io/d saytına yapışdırın:
+// "Import" yox, sol tərəfdəki kod sahəsinə birbaşa yazın/yapışdırın,
+// sağda diaqram avtomatik çəkilir. Export -> PNG/PDF ilə şəkil götürün.
+
+Table customers {
+  customer_id varchar [pk, note: 'hər sifarişdə yeni yaranır']
+  customer_unique_id varchar [note: 'real müştəri']
+  zip_prefix varchar
+  city varchar
+  state varchar
+}
+
+Table orders {
+  order_id varchar [pk]
+  customer_id varchar [ref: > customers.customer_id]
+  order_status varchar
+  purchase_ts timestamp
+  approved_ts timestamp
+  carrier_ts timestamp
+  delivered_ts timestamp
+  estimated_ts timestamp
+  purchase_month date
+  delivery_days numeric
+  days_vs_estimate int
+  is_late boolean
+  has_anomaly boolean
+}
+
+Table order_items {
+  order_id varchar [pk, ref: > orders.order_id]
+  order_item_id int [pk]
+  product_id varchar [ref: > products.product_id]
+  seller_id varchar [ref: > sellers.seller_id]
+  shipping_limit_ts timestamp
+  price numeric
+  freight_value numeric
+}
+
+Table order_payments {
+  order_id varchar [pk, ref: > orders.order_id]
+  payment_sequential int [pk]
+  payment_type varchar
+  installments int
+  payment_value numeric
+}
+
+Table order_reviews {
+  order_id varchar [pk, ref: - orders.order_id, note: 'sifariş başına 1 rəy']
+  review_id varchar
+  review_score int
+  comment_title text
+  comment_message text
+  review_created_ts timestamp
+  review_answered_ts timestamp
+}
+
+Table products {
+  product_id varchar [pk]
+  category_pt varchar [ref: > category_translation.category_pt]
+  category_en varchar
+  name_length int
+  description_length int
+  photos_qty int
+  weight_g numeric
+  length_cm numeric
+  height_cm numeric
+  width_cm numeric
+}
+
+Table category_translation {
+  category_pt varchar [pk]
+  category_en varchar
+}
+
+Table sellers {
+  seller_id varchar [pk]
+  zip_prefix varchar
+  city varchar
+  state varchar
+}
+
+Table geolocation {
+  zip_prefix varchar [pk]
+  lat double
+  lng double
+  city varchar
+  state varchar
+  raw_row_count bigint
+}
+
+// Zip prefiks üzrə ƏLAQƏ (FK yoxdur, çünki bütün zip-lər geolocation-da olmaya bilər)
+Ref: customers.zip_prefix > geolocation.zip_prefix
+Ref: sellers.zip_prefix > geolocation.zip_prefix
